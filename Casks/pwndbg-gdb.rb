@@ -21,5 +21,21 @@ cask "pwndbg-gdb" do
     system "xattr", "-d", "-r", "com.apple.quarantine", "#{staged_path}/pwndbg/"
   end
 
+  caveats do
+    <<~EOS
+      ****************************************************
+      pwndbg-gdb cannot be used to debug Mach-O binaries
+      natively. However, it can still serve as a frontend
+      for remote debugging.
+
+      If you wish to debug native Mach-O/Darwin binaries,
+      you should install pwndbg-lldb instead.
+
+      ****************************************************
+
+                    Enjoy remote debugging!
+    EOS
+  end
+
   zap trash: "~/.cache/pwndbg"
 end
