@@ -1,4 +1,4 @@
-cask "pwndbg" do
+cask "pwndbg-gdb" do
   arch arm: "arm64", intel: "amd64"
 
   version "2025.02.19"
@@ -6,7 +6,7 @@ cask "pwndbg" do
          intel: "83eb5444a4217c57d4add829f94a17e016f55b76027d905f8be13fc46f93e6ad"
 
   url "https://github.com/pwndbg/pwndbg/releases/download/#{version}/pwndbg_#{version}_macos_#{arch}-portable.tar.xz"
-  name "pwndbg"
+  name "pwndbg-gdb"
   desc "Exploit Development and Reverse Engineering with GDB Made Easy"
   homepage "https://github.com/pwndbg/pwndbg"
 
