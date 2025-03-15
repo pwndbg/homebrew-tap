@@ -17,5 +17,9 @@ cask "pwndbg-gdb" do
 
   binary "pwndbg/bin/pwndbg"
 
+  postflight do
+    system "xattr", "-d", "-r", "com.apple.quarantine", "#{staged_path}/pwndbg/"
+  end
+
   zap trash: "~/.cache/pwndbg"
 end
