@@ -50,9 +50,9 @@ jobs:
         run: |
           CASK_FILE="Casks/${{ matrix.cask.name }}.rb"
 
-          sed -i 's/version ".*"/version "${{ steps.vars.outputs.version }}"/' "$CASK_FILE"
-          sed -i 's/arm: *".*"/arm:   "${{ steps.checksum.outputs.sha_arm64 }}"/' "$CASK_FILE"
-          sed -i 's/intel: *".*"/intel: "${{ steps.checksum.outputs.sha_amd64 }}"/' "$CASK_FILE"
+          sed -i 's/  version ".*"/  version "${{ steps.vars.outputs.version }}"/' "$CASK_FILE"
+          sed -i 's/  sha256 arm:   ".*"/  sha256 arm:   "${{ steps.checksum.outputs.sha_arm64 }}"/' "$CASK_FILE"
+          sed -i 's/         intel: ".*"/         intel: "${{ steps.checksum.outputs.sha_amd64 }}"/' "$CASK_FILE"
 
       - name: Commit and push
         run: |
@@ -60,6 +60,12 @@ jobs:
           git config user.email "github-actions@github.com"
           git add Casks/${{ matrix.cask.name }}.rb
           git commit -m "Update ${{ matrix.cask.name }} to version ${{ steps.vars.outputs.version }}"
-          git push
+
+          RETRIES=5
+          for i in $(seq 1 $RETRIES); do
+            git pull --rebase origin main && git push origin main && break
+            echo "Push failed, retrying in $((i*2))s..."
+            sleep $((i*2))
+          done
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
