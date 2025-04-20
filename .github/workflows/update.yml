@@ -1,0 +1,65 @@
+name: Update Release
+
+on:
+  repository_dispatch:
+    types: [pwndbg_release]
+
+jobs:
+  update-cask:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        cask:
+          - name: pwndbg-gdb
+            filename: pwndbg
+          - name: pwndbg-lldb
+            filename: pwndbg-lldb
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set variables
+        id: vars
+        run: |
+          VERSION="${{ github.event.client_payload.version }}"
+          BASE_URL="https://github.com/pwndbg/pwndbg/releases/download/${VERSION}"
+          FILENAME="${{ matrix.cask.filename }}"
+
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "base_url=$BASE_URL" >> $GITHUB_OUTPUT
+          echo "filename=$FILENAME" >> $GITHUB_OUTPUT
+
+      - name: Download release files
+        run: |
+          for arch in arm64 amd64; do
+            FILE="${{ steps.vars.outputs.filename }}_${{ steps.vars.outputs.version }}_macos_${arch}-portable.tar.xz"
+            curl -L -o "$FILE" "${{ steps.vars.outputs.base_url }}/$FILE"
+          done
+
+      - name: Calculate sha256
+        id: checksum
+        run: |
+          for arch in arm64 amd64; do
+            FILE="${{ steps.vars.outputs.filename }}_${{ steps.vars.outputs.version }}_macos_${arch}-portable.tar.xz"
+            HASH=$(sha256sum "$FILE" | cut -d ' ' -f1)
+            echo "sha_${arch}=$HASH" >> $GITHUB_OUTPUT
+          done
+
+      - name: Update Cask file
+        run: |
+          CASK_FILE="Casks/${{ matrix.cask.name }}.rb"
+
+          sed -i 's/version ".*"/version "${{ steps.vars.outputs.version }}"/' "$CASK_FILE"
+          sed -i 's/arm: *".*"/arm:   "${{ steps.checksum.outputs.sha_arm64 }}"/' "$CASK_FILE"
+          sed -i 's/intel: *".*"/intel: "${{ steps.checksum.outputs.sha_amd64 }}"/' "$CASK_FILE"
+
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add Casks/${{ matrix.cask.name }}.rb
+          git commit -m "Update ${{ matrix.cask.name }} to version ${{ steps.vars.outputs.version }}"
+          git push
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
