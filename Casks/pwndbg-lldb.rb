@@ -1,9 +1,9 @@
 cask "pwndbg-lldb" do
   arch arm: "arm64", intel: "amd64"
 
-  version "2025.04.18"
-  sha256 arm:   "6e5ec6933031a1d5b4fcb4dbd215114f555a0d7645ebcf346fdea57713e59c23",
-         intel: "75f488824d91462bd78ff7881f2c97e7ae4ffd397691bd76d3cc1963a3365a7d"
+  version "2025.05.30"
+  sha256 arm:   "41723f5bf3d3422058d4c62210c3b01557ce90c53c715c89b11bfc048b022618",
+         intel: "e44efb0d0c5e9ce336d5ccae0880aabbc9f07da1cffb8a70fe35c4b23181c692"
 
   url "https://github.com/pwndbg/pwndbg/releases/download/#{version}/pwndbg-lldb_#{version}_macos_#{arch}-portable.tar.xz"
   name "pwndbg-lldb"
