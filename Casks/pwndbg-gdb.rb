@@ -5,7 +5,7 @@ cask "pwndbg-gdb" do
   sha256 arm:   "436ba642a68cace021de043149b4ea37c42f361b924c0e504d9d5a991bb79103",
          intel: "17547e8a421fa64ea2b3252d4788dd99631df2944418ce3867197495fd613b94"
 
-  url "https://github.com/pwndbg/pwndbg/releases/download/#{version}/pwndbg_#{version}_macos_#{arch}-portable.tar.xz"
+  url "https://releases.pwndbg.re/releases/#{version}/pwndbg_#{version}_macos_#{arch}-portable.tar.xz"
   name "pwndbg-gdb"
   desc "Exploit Development and Reverse Engineering with GDB Made Easy"
   homepage "https://github.com/pwndbg/pwndbg"
