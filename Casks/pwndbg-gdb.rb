@@ -18,7 +18,7 @@ cask "pwndbg-gdb" do
   binary "pwndbg/bin/pwndbg"
 
   postflight_steps do
-    system "xattr", "-d", "-r", "com.apple.quarantine", "#{staged_path}/pwndbg/"
+    run "xattr", args: ["-d", "-r", "com.apple.quarantine", "{{staged_path}}/pwndbg"]
   end
 
   caveats do
