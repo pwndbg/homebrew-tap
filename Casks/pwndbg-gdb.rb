@@ -1,9 +1,9 @@
 cask "pwndbg-gdb" do
   arch arm: "arm64", intel: "amd64"
 
-  version "2026.10.22"
-  sha256 arm:   "c9ea540ddc1836244bde3f3394f08e09d0fccba5bb45312105ad01811ba5ddd4",
-         intel: "91f777fa34db13060d42eed5124ed390945354953ac8affbf1a215ed4a3e1a14"
+  version "2026.10.28"
+  sha256 arm:   "c93acd2bd351cfa839c2fb18f9ee78c7410ad5e1020b85f486262bfeb312e726",
+         intel: "1bf13c247527eddc4858839bf8d5c7c3c281027fdf6588157d8b82c718da7eed"
 
   url "https://releases.pwndbg.re/releases/#{version}/pwndbg_#{version}_macos_#{arch}-portable.tar.xz"
   name "pwndbg-gdb"
